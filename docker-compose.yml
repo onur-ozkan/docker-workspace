@@ -1,0 +1,31 @@
+version: '3.5'
+
+networks:
+  app_net:
+    driver: ${NETWORK_TYPE}
+
+services:
+  elasticsearch:
+    image: elasticsearch:${ES_VERSION}
+    hostname: elasticsearch
+    volumes:
+      - ${ES_PATH}/data/elasticsearch:/usr/share/elasticsearch/data
+    environment:
+      - cluster.name=mda-cluster
+      - node.name=mda-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - cluster.initial_master_nodes=mda-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "${LOCAL_LISTEN_ADDR}9200:9200"
+      - "${LOCAL_LISTEN_ADDR}9300:9300"
+    networks:
+      - app_net
+    deploy:
+      resources:
+        limits:
+          memory: 1g

@@ -66,7 +66,12 @@ services:
       - app-network
 
   redis:
-    image: 'bitnami/redis:${REDIS_VER}'
+    image: 'redis:${REDIS_VER}'
+    hostname: redis
+    # Apply custom arguments to redis startup
+    command: redis-server ${REDIS_ARGS:- }
+    environment:
+      - REDIS_ARGS=${REDIS_ARGS:- }
     environment:
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
       - ALLOW_EMPTY_PASSWORD=yes
@@ -77,3 +82,15 @@ services:
       - "${REDIS_PORT}:6379"
     volumes:
       - ${WORKSPACE_PATH}/data/redis:/bitnami/redis/data
+
+  memcached:
+    image: memcached:${MEMCACHED_VER}
+    hostname: memcached
+    ports:
+      # [local-machine:]local-port:docker-port
+      - "${LOCAL_LISTEN_ADDR}${MEMCACHED_PORT}:11211"
+    networks:
+      - app-network
+    volumes:
+      # Mount logs
+      - ${WORKSPACE_PATH}/data/Memcached/log/memcd-${MEMCACHED_VER}:/var/log/memcd:rw

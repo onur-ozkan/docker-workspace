@@ -94,3 +94,19 @@ services:
     volumes:
       # Mount logs
       - ${WORKSPACE_PATH}/data/Memcached/log/memcd-${MEMCACHED_VER}:/var/log/memcd:rw
+
+  php:
+    build:
+      context: ./.docker/php/
+      args:
+        version: ${PHP_VER}
+    container_name: php
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: php
+      SERVICE_TAGS: dev
+    volumes:
+      - ${PROJECT_DIR}:/var/www/app
+    networks:
+      - app-network

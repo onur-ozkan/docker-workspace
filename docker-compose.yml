@@ -22,8 +22,8 @@ services:
         soft: -1
         hard: -1
     ports:
-      - "${LOCAL_LISTEN_ADDR}9200:9200"
-      - "${LOCAL_LISTEN_ADDR}9300:9300"
+      - "9200:9200"
+      - "9300:9300"
     networks:
       - app-network
     deploy:
@@ -37,8 +37,12 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "80:80"
+      - "8080:80"
       - "443:443"
+    volumes:
+      - ${PROJECT_DIR}:/var/www
+      - ./cfg/nginx/conf.d/:/etc/nginx/conf.d
+      - ./cfg/nginx/ssl/:/etc/nginx/ssl
     networks:
       - app-network
 
@@ -110,6 +114,6 @@ services:
       SERVICE_NAME: php
       SERVICE_TAGS: dev
     volumes:
-      - ${PROJECT_DIR}:/var/www/app
+      - ${PROJECT_DIR}:/var/www
     networks:
       - app-network

@@ -88,7 +88,7 @@ services:
     hostname: memcached
     ports:
       # [local-machine:]local-port:docker-port
-      - "${LOCAL_LISTEN_ADDR}${MEMCACHED_PORT}:11211"
+      - "${MEMCACHED_PORT}:11211"
     networks:
       - app-network
     volumes:
@@ -99,8 +99,10 @@ services:
     build:
       context: ./.docker/php/
       args:
-        version: ${PHP_VER}
-        extensions: ${PHP_EXTENSIONS}
+        VERSION: ${PHP_VER}
+        EXTENSIONS: ${PHP_EXTENSIONS}
+        HOST: ${GIT_HOST}
+        MAIL: ${GIT_ACC}
     container_name: php
     restart: unless-stopped
     tty: true

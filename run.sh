@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker-compose exec --user root php bash -l
+docker-compose exec --user root machine bash -l

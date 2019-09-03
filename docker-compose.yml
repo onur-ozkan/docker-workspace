@@ -40,7 +40,7 @@ services:
       - "8080:80"
       - "443:443"
     volumes:
-      - ${PROJECT_DIR}:/var/www
+      - ${PROJECT_DIR}:/var/www:delegated
       - ./cfg/nginx/conf.d/:/etc/nginx/conf.d
       - ./cfg/nginx/ssl/:/etc/nginx/ssl
     networks:
@@ -99,21 +99,24 @@ services:
       # Mount logs
       - ${WORKSPACE_PATH}/data/Memcached/log/memcd-${MEMCACHED_VER}:/var/log/memcd:rw
 
-  php:
+  machine:
     build:
-      context: ./.docker/php/
+      context: ./.docker/debian/
       args:
-        VERSION: ${PHP_VER}
-        EXTENSIONS: ${PHP_EXTENSIONS}
-        HOST: ${GIT_HOST}
-        MAIL: ${GIT_ACC}
-    container_name: php
-    restart: unless-stopped
+        VERSION: ${_VER}
+        PACKAGES_: ${EX_PKGS}
+        _PACKAGES: ${INTRODUCTION_PKGS}
+        ENABLE_PHP: ${ENABLE_PHP}
+        PHP: ${PHP_VER}
+    container_name: machine
+    entrypoint: php-fpm7.1 -F -R
     tty: true
     environment:
-      SERVICE_NAME: php
+      SERVICE_NAME: machine
       SERVICE_TAGS: dev
     volumes:
-      - ${PROJECT_DIR}:/var/www
+      - ${PROJECT_DIR}:/var/www:delegated
+      - ${SSH_PATH}:/root/.ssh
+      - ./cfg/php/www.conf:/etc/php/7.1/fpm/pool.d/www.conf
     networks:
       - app-network

@@ -109,7 +109,7 @@ services:
         ENABLE_PHP: ${ENABLE_PHP}
         PHP: ${PHP_VER}
     container_name: machine
-    entrypoint: php-fpm7.1 -F -R
+    entrypoint: ["bash", "/root/entrypoint/entrypoint.sh"]
     tty: true
     environment:
       SERVICE_NAME: machine
@@ -118,5 +118,6 @@ services:
       - ${PROJECT_DIR}:/var/www:delegated
       - ${SSH_PATH}:/root/.ssh
       - ./cfg/php/www.conf:/etc/php/7.1/fpm/pool.d/www.conf
+      - ./entrypoint.sh:/root/entrypoint/entrypoint.sh
     networks:
       - app-network

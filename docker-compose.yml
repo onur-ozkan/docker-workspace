@@ -104,10 +104,14 @@ services:
       context: ./.docker/debian/
       args:
         VERSION: ${_VER}
-        PACKAGES_: ${EX_PKGS}
         _PACKAGES: ${INTRODUCTION_PKGS}
+        PACKAGES_: ${EX_PKGS}
         ENABLE_PHP: ${ENABLE_PHP}
         PHP: ${PHP_VER}
+        ENABLE_YARN: ${ENABLE_YARN}
+        ENABLE_NODEJS: ${ENABLE_NODEJS}
+        EX_BASH: ${EX_BASH}
+        CUSTOM_BASH: ${CUSTOM_BASH}
     container_name: machine
     entrypoint: ["bash", "/root/entrypoint/entrypoint.sh"]
     tty: true

@@ -72,12 +72,7 @@ services:
   redis:
     image: 'redis:${REDIS_VER}'
     hostname: redis
-    # Apply custom arguments to redis startup
-    command: redis-server ${REDIS_ARGS:- }
     environment:
-      - REDIS_ARGS=${REDIS_ARGS:- }
-    environment:
-      # ALLOW_EMPTY_PASSWORD is recommended only for development.
       - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
     networks:
@@ -110,7 +105,6 @@ services:
         PHP: ${PHP_VER}
         ENABLE_YARN: ${ENABLE_YARN}
         ENABLE_NODEJS: ${ENABLE_NODEJS}
-        EX_BASH: ${EX_BASH}
         CUSTOM_BASH: ${CUSTOM_BASH}
     container_name: machine
     entrypoint: ["bash", "/root/entrypoint/entrypoint.sh"]

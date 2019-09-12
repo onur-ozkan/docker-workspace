@@ -41,6 +41,6 @@ RUN if [ ! -z "$PACKAGES_" ]; then \
       apt-get install -y ${PACKAGES_}; \
     fi
 
-RUN if [ "$EX_BASH" = "TRUE" ]; then \
+RUN if [ ! -z "$CUSTOM_BASH" ]; then \
       sh -c "$CUSTOM_BASH"; \
     fi
